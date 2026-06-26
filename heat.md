@@ -44,16 +44,13 @@ If you are not familiar with what a stack is, feel free to Google it or ask your
 
 We can imagine the string as an array and create a `cnt` array to record the "number of atoms represented at each position". A stack has a "Last-In-First-Out (LIFO)" property, which makes it absolutely perfect for finding the most recent left bracket `(` that matches a given right bracket `)`.
 
-Stack illustration:
-![](./images/stack.svg)
-
 ### Stack Logic Breakdown
 
-* **Uppercase letters:** Represents a new atom. We record the count at the current position as 1 and mark it as an "entity" that can be multiplied later (by updating our `idx` tracker).
-* **Lowercase letters:** These are attached to the preceding uppercase letter. They don't create a new atom type, so the count at this current position is 0.
-* **Left bracket `(`:** Marks the beginning of a new scope. We push the current index into the stack.
-* **Right bracket `)`:** Marks the end of the innermost scope. We pop the corresponding left bracket index from the top of the stack, sum up all the atomic counts between these two brackets, store this sum at the current right bracket's position, and reset the values in that intermediate range to zero. Finally, we update `idx` because this entire bracket block can act as an entity multiplied by a trailing number.
-* **Numbers `0-9`:** Read the number and multiply the count of the previous "entity" (which could be an uppercase letter or a right bracket, located at `idx`) by this multiplier.
+1. **Uppercase letters:** Represents a new atom. We record the count at the current position as 1 and mark it as an "entity" that can be multiplied later (by updating our `idx` tracker).
+2. **Lowercase letters:** These are attached to the preceding uppercase letter. They don't create a new atom type, so the count at this current position is 0.
+3. **Left bracket `(`:** Marks the beginning of a new scope. We push the current index into the stack.
+4. **Right bracket `)`:** Marks the end of the innermost scope. We pop the corresponding left bracket index from the top of the stack, sum up all the atomic counts between these two brackets, store this sum at the current right bracket's position, and reset the values in that intermediate range to zero. Finally, we update `idx` because this entire bracket block can act as an entity multiplied by a trailing number.
+5. **Numbers `0-9`:** Read the number and multiply the count of the previous "entity" (which could be an uppercase letter or a right bracket, located at `idx`) by this multiplier.
 
 ```cpp
 #include <bits/stdc++.h>
