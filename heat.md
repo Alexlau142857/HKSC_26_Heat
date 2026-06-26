@@ -45,7 +45,7 @@ If you are not familiar with what a stack is, feel free to Google it or ask your
 We can imagine the string as an array and create a `cnt` array to record the "number of atoms represented at each position". A stack has a "Last-In-First-Out (LIFO)" property, which makes it absolutely perfect for finding the most recent left bracket `(` that matches a given right bracket `)`.
 
 Stack illustration:
-
+![](./images/stack.svg)
 
 ### Stack Logic Breakdown
 
