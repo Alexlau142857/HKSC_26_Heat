@@ -1,6 +1,7 @@
 # Solution for HKSC Heat Event
 - This is not an official solution, and hence there will only be full solution of the task A to C, and partial solution of subtasks of task D & E.
 - As most of you just solved the task A, you should focus more on tasks similar to task B and C (HKOI Level C and Level B)
+- The solution of task D and E is difficult. Feel free to ask if you cannot understand.
 
 ## A Distributing Candies 分發糖果
 - Trivial question, as all of you solved, no need to explain
@@ -192,7 +193,10 @@ int main() {
 - HKOI Level C question
 - Required knowledge:
     - 2D partial sum (HKOI C201)
-    - Binary Search : a technique very useful in many contest, definitely should do more exercise on this algorithm.
+    - Binary Search:
+        - a technique very useful in many contest, definitely should do more exercise on this algorithm. 
+        - **ALSO VERY OFTEN ASKED IN DSE ICT !!!**
+- The task is clear : 
 ```
 #include <bits/stdc++.h>
 using namespace std;
@@ -243,10 +247,21 @@ int main() {
     return 0;
 }
 ```
+Time Complexity: $O(Q(N+M))$
+
+### Optimization
+
+- Clearly, this solution can only obtain half of the mark. With specificly solving the first two subtasks, the above solution can only obtain 65/100. So how can we AC the question?
+- Optimization!!!
+- Note that in a 2d prefix sum, the rows in each column and the columns in each row is monotonically increasing.
+    - Yes! **Binary Search**
+
+
 ## D No 67 不可以 67
 
 
 ## E Dungeon 地下城
+
 ### Before start
 
 There are some graph and data structures in this solution. Although some key ideas are taught in this solution, it is highly recommended you learn some knowledge about graphs before you read this solution.
@@ -287,9 +302,79 @@ In the game, you travel from a starting point $S$ to a destination $T$. Every ro
 
 Therefore, the "highest sword level" the player can keep is simply the **largest room number that is NOT on the path from $S$ to $T$.** If all rooms are on the path, we output 0.
 
----
 
-### Subtask 2 $M = N-1$ (Graph is a Chain)
+### Subtask 1: $N, M \leq 1000, Q = 1$
+By observation on the constriant, the data size is small enough that an inefficient brute force solution (which takes a long time normally) can handle the subtask.
+
+So, the question is **HOW**? How to use simple method to obtain the answer?
+
+Think about keeping the largest sword **ONLY** during the tour from S to T, i.e.: Ignoring one highest possible node in the graph, and try to find a simple path from S to T. As we want the highest possible sword, we can ignore one node from $N$ to $1$, and simply use dfs from S to T to check if there is a simple path. 
+
+#### Code:
+```
+#include <bits/stdc++.h>
+using namespace std;
+
+const int maxn = 2e5 + 100;
+const int maxm = 2e5 + 100;
+
+vector<int> e[maxn];
+bool vis[maxn];
+
+bool dfs(int s, int t, int esp){
+    vis[s] = 1;
+    if(s == t) return true;
+    bool flag = false;
+    for(int v : e[s]){
+        if(v == esp) continue;
+        if(!vis[v]) flag = flag or dfs(v, t, esp);
+    }
+    return flag;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    int n, m, q;
+    cin >> n >> m >> q;
+    set<pair<int, int>> s;
+    for(int i = 0; i < m; i++){
+        int u, v;
+        cin >> u >> v;
+        if(u == v) continue;
+        if(u > v) swap(u, v);
+        if(s.count({u, v}) != 0) continue;
+        else {
+            e[u].emplace_back(v);
+            e[v].emplace_back(u);
+            s.insert({u, v});
+        }
+    }
+    if(n <= 1000 and m <= 1000 and q == 1){
+        int s, t;
+        cin >> s >> t;
+        for(int i = n; i >= 1; i--){
+            if(i == s or i == t) continue;
+            memset(vis, 0, sizeof vis);
+            if(dfs(s, t, i)){
+                cout << i << "\n";
+                return 0;
+            }
+        }
+        cout << "0\n";
+        return 0;
+    }
+    return 0;
+}
+
+```
+
+Time Complexity: $O(QN^2)$
+
+---
+## Advanced subtasks
+### Subtask 2: $M = N-1$ (Graph is a Chain)
 
 The graph is a chain. It looks just like a single straight line.
 
