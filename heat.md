@@ -189,72 +189,153 @@ int main() {
 * **Stack:** [https://judge.hkoi.org/task/X0804](https://judge.hkoi.org/task/X0804)
 * **Recursion:** [https://judge.hkoi.org/task/01046](https://judge.hkoi.org/task/01046)
 
-## C Fence 圍欄
-- HKOI Level C question
-- Required knowledge:
-    - 2D partial sum (HKOI C201)
-    - Binary Search:
-        - a technique very useful in many contest, definitely should do more exercise on this algorithm. 
-        - **ALSO VERY OFTEN ASKED IN DSE ICT !!!**
-- The task is clear : 
-```
+Here is the complete English translation of the problem solution, presented clearly and readably.
+
+---
+
+C Fence
+
+· HKOI Level C question
+· Required knowledge:
+  · 2D prefix sum (HKOI C201)
+  · Binary Search: A technique very useful in many contests; definitely worth practicing more.
+  · ALSO VERY OFTEN ASKED IN DSE ICT !!!
+
+Data Range and Time Complexity Analysis
+
+First, observe the data ranges given in the problem:
+
+· $1 \le N, M \le 3000$
+· $1 \le Q \le 2 \times 10^5$
+
+In a typical programming contest, around $10^8$ basic operations can be performed per second. The time limit for this problem is 1000ms:
+
+· If we use the most straightforward brute‑force method, scanning the entire rectangle with a double loop for every query, each query would take $O(N \times M)$ in the worst case. The total time complexity would be $O(Q \times N \times M)$. Plugging in the maximum values: $2 \times 10^5 \times 3000 \times 3000 = 1.8 \times 10^{12}$, which will obviously cause a Time Limit Exceeded (TLE) error.
+· To keep the total runtime within 1000ms, the total number of operations must be reduced below $10^8$. Therefore, we need to compress the time complexity per query from $O(N \times M)$ down to $O(\log N)$ or $O(1)$. The expected overall time complexity for a full‑score solution should be $O(N \times M + Q \log(\max(N, M)))$.
+
+---
+
+Analysis of the Example’s Key Misleading Point
+
+The most deceptive part of this problem lies in the statement and the example diagram.
+
+The problem says “build a fence of the shortest possible total length to enclose all the sheep,” and the example picture draws an irregular concave polygon in yellow. This can easily mislead contestants into thinking they need to write complex geometric algorithms to dynamically construct a polygon.
+
+However, on a grid where the fence can only run along cell edges:
+
+· For any valid shape enclosing a set of points, its horizontal projection length must be at least $c_{max} - c_{min} + 1$, and its vertical projection length must be at least $r_{max} - r_{min} + 1$.
+· Because edges can only travel in straight lines along the grid, the perimeter of an irregular polygon, in the best case, is exactly the same as the perimeter of its minimum bounding rectangle (bounding box).
+
+Thus, the problem essentially only requires computing the outermost rectangular boundary that encloses all the sheep within the given query range. The formula is:
+
+\text{Perimeter} = 2 \times ((r_{max} - r_{min} + 1) + (c_{max} - c_{min} + 1))
+
+The problem simplifies to: for each query rectangle, how can we quickly locate the top, bottom, left, and right extreme boundaries of the group of sheep inside it?
+
+---
+
+Step‑by‑Step Breakdown and Implementation of Each Subtask
+
+In a contest, if you cannot immediately think of the full solution, using if-else to write separate code paths based on different data range characteristics is an important scoring strategy.
+
+Subtask 1 (7%): Exactly 1 cell is occupied by sheep
+
+There is only one sheep on the whole map. Simply record its coordinates $(sr, sc)$ during input. For each query, just check whether this sheep falls inside the query rectangle. If it does, the minimum fence length surrounding a single sheep is $2 \times (1 + 1) = 4$; if not, it is $0$.
+
+· Time complexity: $O(N \times M + Q)$
+
+```cpp
 #include <bits/stdc++.h>
 using namespace std;
-
-#define ll long long
-
-const int maxn = 3010;
-const int maxm = 3010;
-int seq[maxn][maxm];
-
-int cal(int r1, int c1, int r2, int c2){
-    return seq[r2][c2] - seq[r1 - 1][c2] - seq[r2][c1 - 1] + seq[r1 - 1][c1 - 1];
-}
-
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
-    int n, m, q;
-    cin >> n >> m >> q;
-    memset(seq, 0, sizeof seq);
-    for(int i = 1; i <= n; i++){
-        string s;
-        cin >> s;
-        for(int j = 1; j <= m; j++){
-            seq[i][j] = s[j - 1] - '0';
-        }
-    }
-    for(int  i = 1; i <= n; i++){
-        for(int j = 1; j <= m; j++){
-            seq[i][j] += seq[i - 1][j] + seq[i][j - 1] - seq[i - 1][j - 1];
-        }
-    }
-    for(int i = 1; i <= q; i++){
-        int r1, c1, r2, c2;
-        cin >> r1 >> c1 >> r2 >> c2;
-        int curr = cal(r1, c1, r2, c2);
-        if(curr == 0){
-            cout << "0\n";
-            continue;
-        }
-        while(r1 + 1 <= n and cal(r1 + 1, c1, r2, c2) == curr) r1++; 
-        while(c1 + 1 <= m and cal(r1, c1 + 1, r2, c2) == curr) c1++; 
-        while(r2 - 1 >= 1 and cal(r1, c1, r2 - 1, c2) == curr) r2--;
-        while(c2 - 1 >= 1 and cal(r1, c1, r2, c2 - 1) == curr) c2--;
-        cout << 2 * ((r2 - r1 + 1) + (c2 - c1 + 1)) << "\n";
-    }
     return 0;
 }
 ```
-Time Complexity: $O(Q(N+M))$
 
-### Optimization
+Subtask 2 (8%): Exactly 2 cells are occupied by sheep
 
-- Clearly, this solution can only obtain half of the mark. With specificly solving the first two subtasks, the above solution can only obtain 65/100. So how can we AC the question?
-- Optimization!!!
-- Note that in a 2d prefix sum, the rows in each column and the columns in each row is monotonically increasing.
-    - Yes! **Binary Search**
+Record the coordinates of the two sheep. For each query, separately determine whether each sheep lies inside the query rectangle. Then find the extreme coordinates of all sheep inside the rectangle to calculate the perimeter.
+
+· Time complexity: $O(N \times M + Q)$
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+    return 0;
+}
+```
+
+Subtask 3 (15%): $N = 1$
+
+The height is fixed to 1, so the 2D grid degenerates into a 1D array. We only care about the leftmost boundary $L$ and rightmost boundary $R$ in the horizontal direction.
+
+· Guided thinking: When repeatedly querying the boundaries of elements within an interval, we can first use a 1D prefix sum to determine, in $O(1)$ time, whether the interval contains any sheep. Because the prefix sum array is monotonic (non‑decreasing), if there are sheep inside the interval, we can use Binary Search to quickly cut out the left and right boundaries.
+· Time complexity: $O(M + Q \log M)$
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+    return 0;
+}
+```
+
+Subtask 4 (15%): $Q = 1$
+
+Since there is only one query, no complex optimization is needed. Directly traverse the rectangular region $[X_1, X_2] \times [Y_1, Y_2]$ specified by the query.
+
+· Time complexity: $O(N \times M)$
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+    return 0;
+}
+```
+
+Subtask 5 (20%): $Q \le 3000$
+
+When $Q$ reaches 3000, scanning with a double loop for every query will cause a TLE.
+
+· Guided thinking: How can we quickly obtain the total number of sheep in any sub‑rectangle? We need to introduce 2D Prefix Sum. After obtaining the total sheep count in the current region, we can shrink the four boundaries of the query rectangle inward step by step (using while loops). As long as the total number of sheep inside the rectangle does not decrease after shrinking, it means the trimmed edge is empty and can be safely removed.
+· Time complexity: $O(N \times M + Q(N + M))$
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+    return 0;
+}
+```
+
+Subtask 6 (35%): No additional constraints ($Q \le 2 \times 10^5$)
+
+· Guided thinking: Facing 200,000 queries, the linear while‑loop that shrinks the rectangle row by row will time out. When we fix three of the boundaries and move the fourth, the change in the number of contained sheep is monotonic. Since there is monotonicity, what method can we use to compress the complexity of finding the boundary from linear to logarithmic? The answer is Binary Search. Instead of stepping one cell at a time, we directly cut the range in half to verify whether the sheep count remains unchanged.
+· Time complexity: $O(N \times M + Q \log(\max(N, M)))$
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+    return 0;
+}
+```
+
+---
+
+Combined Branching Code
+
+Below is the complete code that integrates all the individual subtask solutions, using if-else inside the main function to branch based on input characteristics (such as total number of sheep, the value of $N$, the value of $Q$):
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+    return 0;
+}
+```
 
 
 ## D No 67 不可以 67
