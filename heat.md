@@ -250,7 +250,7 @@ int main() {
 1. 2D prefix sum 二維前綴和 (HKOI C201)
 2. Binary Search 二分搜尋 (a technique very useful in many contests; definitely worth practicing more).
 
-# **Binary search**  ALSO VERY OFTEN ASKED IN DSE ICT !!!
+**Binary search**  ALSO VERY OFTEN ASKED IN DSE ICT !!!
 
 ---
 
@@ -282,44 +282,52 @@ To keep the total runtime within 1000ms, the total number of operations must be 
 Analysis of the Example’s Key Misleading Point (範例中最容易誤導人的地方)
 
 The most deceptive part of this problem lies in the statement and the example diagram.
+
 這題最騙人的地方在於題目敘述和那張範例圖。
 
 The problem says “build a fence of the shortest possible total length to enclose all the sheep,” and the example picture draws an irregular concave polygon in yellow. This can easily mislead contestants into thinking they need to write complex geometric algorithms to dynamically construct a polygon.
+
 題目說「建造一個總長度最短的籬笆把所有羊圍起來」，然後範例圖片畫了一個不規則的凹多邊形用黃色標示，很容易讓人誤以為要寫複雜的幾何演算法去動態構建多邊形。
 
 However, on a grid where the fence can only run along cell edges:
+
 不過，在一個柵欄只能沿著格線走的網格上：
 
 · For any valid shape enclosing a set of points, its horizontal projection length must be at least $c_{max} - c_{min} + 1$, and its vertical projection length must be at least $r_{max} - r_{min} + 1$.
-    任何一個合法圍住一群點的形狀，它的水平投影長度至少是 $c_{max} - c_{min} + 1$，垂直投影長度至少是 $r_{max} - r_{min} + 1$。
+
+任何一個合法圍住一群點的形狀，它的水平投影長度至少是 $c_{max} - c_{min} + 1$，垂直投影長度至少是 $r_{max} - r_{min} + 1$。
+
 · Because edges can only travel in straight lines along the grid, the perimeter of an irregular polygon, in the best case, is exactly the same as the perimeter of its minimum bounding rectangle (bounding box).
-    因為邊只能沿著格線走直線，不規則多邊形的周長，最好的情況下就等於它最小包圍矩形的周長。
+
+因為邊只能沿著格線走直線，不規則多邊形的周長，最好的情況下就等於它最小包圍矩形的周長。
 
 Thus, the problem essentially only requires computing the outermost rectangular boundary that encloses all the sheep within the given query range. The formula is:
+
 所以這題基本上只需要找出查詢範圍內所有羊的最外圍矩形邊界，公式就是：
 
 \text{Perimeter} = 2 \times ((r_{max} - r_{min} + 1) + (c_{max} - c_{min} + 1))
 
 The problem simplifies to: for each query rectangle, how can we quickly locate the top, bottom, left, and right extreme boundaries of the group of sheep inside it?
+
 問題就簡化成：每次查詢一個矩形，要怎麼快速找出裡面那群羊的上下左右最遠邊界？
 
 ---
 
-Step‑by‑Step Breakdown and Implementation of Each Subtask
-各子任務逐步拆解與實現
+> Step‑by‑Step Breakdown and Implementation of Each Subtask (各子任務逐步拆解與實現)
 
 In a contest, if you cannot immediately think of the full solution, using if-else to write separate code paths based on different data range characteristics is an important scoring strategy.
+
 比賽中如果沒辦法馬上想到滿分解，用 if-else 根據不同數據範圍特性去寫不同段的 code 也是很重要的搶分策略。
 
 ---
 
-Subtask 1 (7%): Exactly 1 cell is occupied by sheep
+> Subtask 1 (7%): Exactly 1 cell is occupied by sheep
 
 There is only one sheep on the whole map. Simply record its coordinates $(sr, sc)$ during input. For each query, just check whether this sheep falls inside the query rectangle. If it does, the minimum fence length surrounding a single sheep is $2 \times (1 + 1) = 4$; if not, it is $0$.
+
 整張地圖只有一隻羊，輸入時直接記下牠的座標 $(sr, sc)$。每次查詢只要判斷這隻羊有沒有落在查詢矩形內，有的話一隻羊的最小籬笆長度就是 $2 \times (1 + 1) = 4$，沒有就是 $0$。
 
 · Time complexity: $O(N \times M + Q)$
-    時間複雜度：$O(N \times M + Q)$
 
 ```cpp
 #include <bits/stdc++.h>
@@ -333,13 +341,13 @@ int main() {
 
 ---
 
-Subtask 2 (8%): Exactly 2 cells are occupied by sheep
+> Subtask 2 (8%): Exactly 2 cells are occupied by sheep
 
 Record the coordinates of the two sheep. For each query, separately determine whether each sheep lies inside the query rectangle. Then find the extreme coordinates of all sheep inside the rectangle to calculate the perimeter.
+
 記錄兩隻羊的座標。每次查詢分別判斷這兩隻羊是否在矩形內，再找出在矩形內的所有羊的極值座標，計算周長。
 
-· Time complexity: $O(N \times M + Q)$
-    時間複雜度：$O(N \times M + Q)$
+· Time complexity: $O(N \times M + Q)
 
 ```cpp
 #include <bits/stdc++.h>
@@ -353,15 +361,17 @@ int main() {
 
 ---
 
-Subtask 3 (15%): $N = 1$
+> Subtask 3 (15%): $N = 1$
 
 The height is fixed to 1, so the 2D grid degenerates into a 1D array. We only care about the leftmost boundary $L$ and rightmost boundary $R$ in the horizontal direction.
+
 高度固定為 1，二維網格退化成一維陣列，我們只需要關心水平方向的最左邊界 $L$ 和最右邊界 $R$。
 
 · Guided thinking: When repeatedly querying the boundaries of elements within an interval, we can first use a 1D prefix sum to determine, in $O(1)$ time, whether the interval contains any sheep. Because the prefix sum array is monotonic (non‑decreasing), if there are sheep inside the interval, we can use Binary Search to quickly cut out the left and right boundaries.
-    引導思考：當需要反覆查詢一個區間內有元素的邊界時，可以先做一維前綴和，在 $O(1)$ 時間內判斷該區間有沒有羊。因為前綴和陣列具有單調性（非遞減），如果有羊在區間內，就可以用二分搜尋快速切出左右邊界。
+
+引導思考：當需要反覆查詢一個區間內有元素的邊界時，可以先做一維前綴和，在 $O(1)$ 時間內判斷該區間有沒有羊。因為前綴和陣列具有單調性（非遞減），如果有羊在區間內，就可以用二分搜尋快速切出左右邊界。
+
 · Time complexity: $O(M + Q \log M)$
-    時間複雜度：$O(M + Q \log M)$
 
 ```cpp
 #include <bits/stdc++.h>
@@ -375,13 +385,13 @@ int main() {
 
 ---
 
-Subtask 4 (15%): $Q = 1$
+> Subtask 4 (15%): $Q = 1$
 
 Since there is only one query, no complex optimization is needed. Directly traverse the rectangular region $[X_1, X_2] \times [Y_1, Y_2]$ specified by the query.
+
 因為只有一次查詢，不需要做複雜的優化，直接遍歷該次查詢指定的矩形區域 $[X_1, X_2] \times [Y_1, Y_2]$ 即可。
 
 · Time complexity: $O(N \times M)$
-    時間複雜度：$O(N \times M)$
 
 ```cpp
 #include <bits/stdc++.h>
@@ -395,15 +405,17 @@ int main() {
 
 ---
 
-Subtask 5 (20%): $Q \le 3000$
+> Subtask 5 (20%): $Q \le 3000$
 
 When $Q$ reaches 3000, scanning with a double loop for every query will cause a TLE.
+
 當 $Q$ 到 3000 時，每次查詢都用雙層迴圈掃會 TLE。
 
 · Guided thinking: How can we quickly obtain the total number of sheep in any sub‑rectangle? We need to introduce 2D Prefix Sum. After obtaining the total sheep count in the current region, we can shrink the four boundaries of the query rectangle inward step by step (using while loops). As long as the total number of sheep inside the rectangle does not decrease after shrinking, it means the trimmed edge is empty and can be safely removed.
-    引導思考：要怎麼快速得到任意子矩形的羊總數？我們需要引入二維前綴和。在取得當前區域的羊總數後，可以一步步（用 while 迴圈）將查詢矩形的四邊向內縮，只要縮了之後矩形的羊總數沒有變少，就代表那條邊是空的，可以放心拔掉。
-· Time complexity: $O(N \times M + Q(N + M))$
-    時間複雜度：$O(N \times M + Q(N + M))$
+
+引導思考：要怎麼快速得到任意子矩形的羊總數？我們需要引入二維前綴和。在取得當前區域的羊總數後，可以一步步（用 while 迴圈）將查詢矩形的四邊向內縮，只要縮了之後矩形的羊總數沒有變少，就代表那條邊是空的，可以放心拔掉。
+
+· Time complexity: $O(N \times M + Q(N + M))
 
 ```cpp
 #include <bits/stdc++.h>
