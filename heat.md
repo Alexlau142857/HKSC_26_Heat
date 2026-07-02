@@ -1,4 +1,4 @@
-Solution for HKSC Heat Event
+#### Solution for HKSC Heat Event
 
 This isn't an official solution, so I'll just provide full solutions for tasks A to C, and partial solutions for some subtasks of D and E.
 Since most of you managed to solve task A, I'd suggest focusing more on problems like B and C (around HKOI Level C and Level B).
@@ -6,15 +6,21 @@ The solutions for D and E are quite tough — feel free to ask if anything is un
 
 這不是官方題解，所以只會提供 A 到 C 題的完整解答，以及 D 和 E 題部分子任務的解法。因為大部分同學都解出了 A 題，建議大家多花時間在像 B 和 C 這種程度的題目上（大概 HKOI Level C 和 Level B）。D 跟 E 的題解比較難，看不懂的話隨時發問。
 
+
+
 ---
 
-A Distributing Candies 分發糖果
+
+
+### A Distributing Candies 分發糖果
 
 A really trivial problem, basically everyone solved it, so no deep explanation needed. If you wrote a long solution, here's a clean one-liner that does the job:
-$\max(0, A - X) + \max(0, B - Y)$
 
 這題很簡單，大家都解出來了，不用多解釋。如果你寫了很長的程式碼，這裡有一個乾淨的一行解法：
+
 $\max(0, A - X) + \max(0, B - Y)$
+
+
 
 ```cpp
 #include <bits/stdc++.h>
@@ -30,49 +36,63 @@ int main(){
 ```
 
 
-—
+---
 
 
 
-B Bright Chemist 光明化學家
+### B Bright Chemist 光明化學家
 
 Let's start by checking the data constraints given in the problem: $|S| \le 100{,}000$, $N \le 1{,}000{,}000{,}000$. This tells us our code should run in about $O(N)$ time.
+
 先來看一下題目給的數據範圍：$|S| \le 100{,}000$，$N \le 1{,}000{,}000{,}000$。這表示我們的程式時間複雜度大約要落在 $O(N)$。
 
 The main challenge here is dealing with nested brackets and number multipliers. Brackets in a chemical formula can be nested arbitrarily deep, and a number right after a bracket multiplies all the atoms inside that bracket block.
+
 這題的核心難點在於處理嵌套括號和數字倍數。化學式裡的括號可以無限嵌套，而括號後面的數字會把裡面所有原子的數量都乘上去。
 
 When you run into a "nested bracket" problem, the core idea is to work inside-out: figure out the total count for the innermost bracket first, then pass that result back to the outer layer.
+
 遇到這種「嵌套括號」的問題，基本的想法都是從內層往外層處理：先把最內層括號的總數算出來，再把結果交回給外層。
 
-Two standard ways to handle this are Stack and Recursion.
-處理這種問題有兩種常見方法：Stack（堆疊）和Recursion（遞迴）。
+
+Two standard ways to handle this are **Stack（堆疊）** and **Recursion（遞迴）**.
 
 ---
 
-Approach 1: Stack（棧）
+ > Approach 1: Stack（棧）
 
-If you're not sure what a stack is, you can always Google it or ask a friendly AI assistant!
+If you're not sure what a stack is, you can always Google it or ask a AI assistant!
+
 如果你對 stack 不太熟悉，隨時可以上網搜尋或問問 AI ！
 
-· https://en.wikipedia.org/wiki/Stack_(abstract_data_type)
-· (other standard data structure resources...)
 
-Think of the string as an array, and create a cnt array to record "the number of atoms represented at each position". A stack works in a Last-In-First-Out (LIFO) way, which makes it perfect for finding the most recent ( that matches a given ).
-我們可以把字串想像成一個陣列，並建立一個 cnt 陣列來記錄「每個位置代表的原子數量」。Stack 具有後進先出 (LIFO) 的特性，非常適合用來找到最近的 ( 與 ) 配對。
+Think of the string as an array, and create a cnt array to record "the number of atoms represented at each position". A stack works in a Last-In-First-Out (LIFO) way, which makes it perfect for finding the most recent '(' that matches a given ')'.
 
-Stack Logic Breakdown:
+我們可以把字串想像成一個陣列，並建立一個 cnt 陣列來記錄「每個位置代表的原子數量」。Stack 具有後進先出 (LIFO) 的特性，非常適合用來找到最近的 '(' 與 ')' 配對。
 
-· Uppercase letters: A new atom appears. We record the count at the current position as 1 and mark this spot as an "entity" that can be multiplied later (by updating idx).
-    大寫字母： 代表一個新原子。我們把當前位置的數量記為 1，並標記這個位置是「可以被後面數字乘上的單位」（透過更新 idx）。
-· Lowercase letters: These just extend the previous uppercase letter, so they don't create a new atom — the count at this position stays 0.
-    小寫字母： 只是前面大寫字母的延伸，不產生新原子，當前位置的數量保持 0。
-· Left bracket (: Marks the start of a new scope. We push the current index onto the stack.
-    左括號 (： 一個新範圍的開始，把當前的索引推入 stack。
-· Right bracket ): Marks the end of the innermost scope. We pop the matching left bracket index from the stack, sum up all atomic counts between those two brackets, store that sum at the right bracket's position, and clear the values in between to zero. Then we update idx because this whole bracket block can now act as an entity that a trailing number may multiply.
-    右括號 )： 最內層範圍的結束。從 stack 頂端取出對應的左括號索引，把這兩個括號之間所有原子數量加總起來，存到右括號的位置，並把中間那段清成零。然後更新 idx，因為整個括號區塊現在也能被後面的數字乘上。
-· Numbers 0-9: Read the digit, then multiply the count of the previous entity (which could be a single uppercase letter or a whole bracket block, pointed to by idx) by that number.
+### Stack Logic Breakdown:
+
+1. Uppercase letters: A new atom appears. We record the count at the current position as 1 and mark this spot as an "entity" that can be multiplied later (by updating idx).
+
+   大寫字母： 代表一個新原子。我們把當前位置的數量記為 1，並標記這個位置是「可以被後面數字乘上的單位」（透過更新 idx）。
+
+2. Lowercase letters: These just extend the previous uppercase letter, so they don't create a new atom — the count at this position stays 0.
+
+   小寫字母： 只是前面大寫字母的延伸，不產生新原子，當前位置的數量保持 0。
+
+3. Left bracket (: Marks the start of a new scope. We push the current index onto the stack.
+   
+   左括號 (： 一個新範圍的開始，把當前的索引推入 stack。
+
+4. Right bracket ): Marks the end of the innermost scope. We pop the matching left bracket index from the stack, sum up all atomic counts between those two brackets, store that sum at the right bracket's position, and clear the values in between to zero. Then we update idx because this whole bracket block can now act as an entity that a trailing number may multiply.
+  
+   右括號 )： 最內層範圍的結束。從 stack 頂端取出對應的左括號索引，把這兩個括號之間所有原子數量加總起來，存到右括號的位置，並把中間那段清成零。然後更新 idx，因為整個括號區塊現在也能被後面的數字乘上。
+
+5. Numbers 0-9: Read the digit, then multiply the count of the previous entity (which could be a single uppercase letter or a whole bracket block, pointed to by idx) by that number.
+
     數字 0-9： 讀取數字，然後把前一個實體（可能是大寫字母或一個完整的括號區塊，由 idx 指向）的數量乘上這個數字。
+
+
 
 ```cpp
 #include <bits/stdc++.h>
@@ -126,27 +146,40 @@ int main() {
 
 ---
 
-Approach 2: Recursion（遞歸）
+ > Approach 2: Recursion（遞歸）
 
 
 The structure inside a pair of brackets is exactly the same as the overall chemical formula. That means we can treat "calculate the value inside the brackets" as a smaller subproblem and hand it to a recursive function.
+
 一對括號裡面的結構，其實跟整個化學式的結構一模一樣。所以我們可以很自然地，把「計算括號內部的值」當成一個較小的子問題，交給遞迴函數去處理。
 
-Recursion Logic Breakdown:
+### Recursion Logic Breakdown:
 
-We design a parse() function and use a pointer i to walk through the string:
-我們設計一個 parse() 函數，用一個指針 i 掃過字串：
+We design a subprogram and use a pointer i to walk through the string:
 
-· Uppercase letters: The base count is 1.
+我們設計一個函數，用一個指針 i 掃過字串：
+
+1. Uppercase letters: The base count is 1.
+
     大寫字母： 基本數量就是 1。
-· Lowercase letters: They don't affect the count, so we just skip over them.
+
+2. Lowercase letters: They don't affect the count, so we just skip over them.
+
     小寫字母： 不影響數量，直接跳過。
-· Left bracket (: We're entering a new substructure. We recursively call parse() to get the total atom count inside this bracket pair.
+
+3. Left bracket (: We're entering a new substructure. We recursively call parse() to get the total atom count inside this bracket pair.
+
     左括號 (： 進入一個子結構，我們遞迴呼叫 parse()，取得這一對括號裡面的原子總數。
-· Right bracket ): The current substructure ends. We return the accumulated total of atoms in this layer back to the outer call.
+
+4. Right bracket ): The current substructure ends. We return the accumulated total of atoms in this layer back to the outer call.
+
     右括號 )： 當前子結構結束，我們回傳這層累積的原子總數給上一層。
-· Numbers: Take the "previously parsed count" (which could be a single atom or a full bracket block) and multiply it by the digit.
-    數字： 把「剛剛解析出來的數量」（可能是一個原子或一個完整的括號區塊）乘上這個數字。
+
+5. Numbers: Take the "previously parsed count" (which could be a single atom or a full bracket block) and multiply it by the digit.
+
+   數字： 把「剛剛解析出來的數量」（可能是一個原子或一個完整的括號區塊）乘上這個數字。
+
+
 
 ```cpp
 #include <bits/stdc++.h>
@@ -194,58 +227,59 @@ int main() {
 }
 ```
 
+
+
 ---
 
-Recommended Questions 
+## Recommended Questions 
 
 · Stack: https://judge.hkoi.org/task/X0801
 · Stack: https://judge.hkoi.org/task/X0804
 · Recursion: https://judge.hkoi.org/task/01046
 · Recursion: https://judge.hkoi.org/task/C601 
 
-—
 
-
-
-C Fence 圍欄
-
-· HKOI Level C question
-    HKOI Level C 的題目
-· Required knowledge: 
-2D prefix sum (HKOI C201)
-Binary Search (a technique very useful in many contests; definitely worth practicing more).
-
-    需要掌握的知識：
-二維前綴和 (HKOI C201)
-二分搜尋（在很多比賽中都很實用，絕對值得多練習）。
-
-· **Binary search**  ALSO VERY OFTEN ASKED IN DSE ICT !!!
-    DSE ICT 也很常考 !!!
 
 ---
 
-Data Range and Time Complexity Analysis
-數據範圍與時間複雜度分析
+### C Fence 圍欄
+
+> HKOI Level C question
+
+## Required knowledge: 
+1. 2D prefix sum 二維前綴和 (HKOI C201)
+2. Binary Search 二分搜尋 (a technique very useful in many contests; definitely worth practicing more).
+
+# **Binary search**  ALSO VERY OFTEN ASKED IN DSE ICT !!!
+
+---
+
+### Data Range and Time Complexity Analysis (數據範圍與時間複雜度分析)
 
 First, observe the data ranges given in the problem:
+
 先看一下題目給的數據範圍：
 
 · $1 \le N, M \le 3000$
 · $1 \le Q \le 2 \times 10^5$
 
 In a typical programming contest, around $10^8$ basic operations can be performed per second. The time limit for this problem is 1000ms.
+
 一般程式比賽中，一秒大約可以執行 $10^8$ 次基本操作，這題的時間限制是 1000ms。
 
 If we use the most straightforward brute‑force method, scanning the entire rectangle with a double loop for every query, each query would take $O(N \times M)$ in the worst case. The total time complexity would be $O(Q \times N \times M)$. Plugging in the maximum values: $2 \times 10^5 \times 3000 \times 3000 = 1.8 \times 10^{12}$, which will obviously cause a Time Limit Exceeded (TLE) error.
+
 如果我們用最直接的暴力法，每次查詢都用兩層迴圈掃過整個矩形，最壞情況下每次查詢要 $O(N \times M)$，總時間複雜度會是 $O(Q \times N \times M)$。代入最大值：$2 \times 10^5 \times 3000 \times 3000 = 1.8 \times 10^{12}$，這很明顯會 TLE。
 
 To keep the total runtime within 1000ms, the total number of operations must be reduced below $10^8$. Therefore, we need to compress the time complexity per query from $O(N \times M)$ down to $O(\log N)$ or $O(1)$. The expected overall time complexity for a full‑score solution should be $O(N \times M + Q \log(\max(N, M)))$.
+
 為了讓整體執行時間壓在 1000ms 內，總操作量必須降到 $10^8$ 以下，所以我們需要把每次查詢的時間複雜度從 $O(N \times M)$ 壓到 $O(\log N)$ 或 $O(1)$，滿分解的整體時間複雜度大概是 $O(N \times M + Q \log(\max(N, M)))$。
+
+
 
 ---
 
-Analysis of the Example’s Key Misleading Point
-範例中最容易誤導人的地方
+Analysis of the Example’s Key Misleading Point (範例中最容易誤導人的地方)
 
 The most deceptive part of this problem lies in the statement and the example diagram.
 這題最騙人的地方在於題目敘述和那張範例圖。
