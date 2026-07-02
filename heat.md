@@ -146,7 +146,7 @@ int main() {
 
 ---
 
- > Approach 2: Recursion（遞歸）
+> Approach 2: Recursion（遞歸）
 
 
 The structure inside a pair of brackets is exactly the same as the overall chemical formula. That means we can treat "calculate the value inside the brackets" as a smaller subproblem and hand it to a recursive function.
@@ -234,8 +234,11 @@ int main() {
 ## Recommended Questions 
 
 · Stack: https://judge.hkoi.org/task/X0801
+
 · Stack: https://judge.hkoi.org/task/X0804
+
 · Recursion: https://judge.hkoi.org/task/01046
+
 · Recursion: https://judge.hkoi.org/task/C601 
 
 
@@ -279,7 +282,7 @@ To keep the total runtime within 1000ms, the total number of operations must be 
 
 ---
 
-Analysis of the Example’s Key Misleading Point (範例中最容易誤導人的地方)
+### Analysis of the Example’s Key Misleading Point (範例中最容易誤導人的地方)
 
 The most deceptive part of this problem lies in the statement and the example diagram.
 
@@ -313,7 +316,7 @@ The problem simplifies to: for each query rectangle, how can we quickly locate t
 
 ---
 
-> Step‑by‑Step Breakdown and Implementation of Each Subtask (各子任務逐步拆解與實現)
+## Step‑by‑Step Breakdown and Implementation of Each Subtask (各子任務逐步拆解與實現)
 
 In a contest, if you cannot immediately think of the full solution, using if-else to write separate code paths based on different data range characteristics is an important scoring strategy.
 
@@ -429,12 +432,14 @@ int main() {
 
 ---
 
-Subtask 6 (35%): No additional constraints ($Q \le 2 \times 10^5$)
+> Subtask 6 (35%): No additional constraints ($Q \le 2 \times 10^5$)
 
 · Guided thinking: Facing 200,000 queries, the linear while‑loop that shrinks the rectangle row by row will time out. When we fix three of the boundaries and move the fourth, the change in the number of contained sheep is monotonic. Since there is monotonicity, what method can we use to compress the complexity of finding the boundary from linear to logarithmic? The answer is Binary Search. Instead of stepping one cell at a time, we directly cut the range in half to verify whether the sheep count remains unchanged.
-    引導思考：面對 200,000 筆查詢，用線性的 while 一步一步縮矩形會超時。我們固定三條邊、移動第四條邊時，包含的羊數量變化是單調的。既然有單調性，能用什麼方法把找邊界的複雜度從線性壓到對數級？答案就是二分搜尋。不再一格一格移動，而是直接對範圍切半去驗證羊的數量有沒有保持不變。
+
+引導思考：面對 200,000 筆查詢，用線性的 while 一步一步縮矩形會超時。我們固定三條邊、移動第四條邊時，包含的羊數量變化是單調的。既然有單調性，能用什麼方法把找邊界的複雜度從線性壓到對數級？答案就是二分搜尋。不再一格一格移動，而是直接對範圍切半去驗證羊的數量有沒有保持不變。
+
 · Time complexity: $O(N \times M + Q \log(\max(N, M)))$
-    時間複雜度：$O(N \times M + Q \log(\max(N, M)))$
+
 
 ```cpp
 #include <bits/stdc++.h>
@@ -448,7 +453,7 @@ int main() {
 
 ---
 
-Full solution:
+### Full solution:
 
 ```cpp
 #include <bits/stdc++.h>
@@ -460,109 +465,127 @@ int main() {
 }
 ```
 
-Recommended Questions：
+## Recommended Questions：
 
 …
 
 
 
-—
+---
 
 
 
 
-D No 67 不可以 67
+### D No 67 不可以 67
 
-In this question, I will only explain how to get 51/67 marks.
-這題我只會講解怎麼拿到 51/67 分。
+In this question, I will only explain how to get **51/67 marks**.
 
 · Solution Strategy: Split by subtask characteristics
-    解題策略：根據子任務特性拆分處理
-· Core Knowledge: Basic string operations (std::string::find and erase), 1D Prefix Sum
-    核心知識：基本字串操作（std::string::find 和 erase）、一維前綴和
+    
+> 解題策略：根據子任務特性拆分處理
+
+· Core Knowledge: Basic string operations (std::string::find and erase), 1D Prefix Sum (一維前綴和)
 
 ---
 
-Data Range and Time Complexity Analysis
-數據範圍與時間複雜度分析
+## Data Range and Time Complexity Analysis (數據範圍與時間複雜度分析)
 
 The string length $|S|$ can be up to $10^5$, and the number of queries $Q$ up to $10^5$. Time limit is 1000ms.
+
 字串長度 $|S|$ 最多可以到 $10^5$，查詢次數 $Q$ 也最多到 $10^5$，時間限制是 1000ms。
 
 · Simulation method: Extract the substring and repeatedly find and delete "67". Each deletion requires shifting characters in the string; in the worst case the time complexity is related to the square of the query interval length. When $Q$ is small (e.g. $Q \le 10$), this method can pass.
-    模擬法：擷取子字串，然後反覆尋找並刪除 "67"。每次刪除都要搬移字元，最壞情況下的時間複雜度和查詢區間長度的平方有關。當 $Q$ 很小（例如 $Q \le 10$）時，這個方法可以通過。
+
+模擬法：擷取子字串，然後反覆尋找並刪除 "67"。每次刪除都要搬移字元，最壞情況下的時間複雜度和查詢區間長度的平方有關。當 $Q$ 很小（例如 $Q \le 10$）時，這個方法可以通過。
+
 · Efficient solution: When $Q$ reaches $10^5$, each query must be answered in $O(1)$ or $O(\log |S|)$ time, otherwise it will exceed the time limit.
-    高效解法：當 $Q$ 達到 $10^5$，每筆查詢必須在 $O(1)$ 或 $O(\log |S|)$ 內完成，否則會超時。
+    
+高效解法：當 $Q$ 達到 $10^5$，每筆查詢必須在 $O(1)$ 或 $O(\log |S|)$ 內完成，否則會超時。
 
 ---
 
-Subtask Analysis
+## Subtask Analysis
 
-Subtask 1 (12%): $|S| \le 20, Q \le 10$
+> Subtask 1 (12%): $|S| \le 20, Q \le 10$
 
 · Characteristic: Very short string, very few queries.
-    特性：字串很短，查詢很少。
+    
+特性：字串很短，查詢很少。
+
 · Solution: Directly extract the interval substring and simulate, or any brute‑force method will pass.
-    解法：直接擷取區間子字串並模擬，或是任何暴力方法都會過。
+
+解法：直接擷取區間子字串並模擬，或是任何暴力方法都會過。
 
 ---
 
-Subtask 2 (18%): $Q \le 10$, and $S$ only contains digits 6 and 7
-子任務 2 (18%)：$Q \le 10$，且 $S$ 只包含數字 6 和 7
+> Subtask 2 (18%): $Q \le 10$, and $S$ only contains digits 6 and 7
 
 · Characteristic: String consists only of 6 and 7, and there are at most 10 queries.
-    特性：字串只由 6 和 7 構成，而且最多只有 10 筆查詢。
+    
+特性：字串只由 6 和 7 構成，而且最多只有 10 筆查詢。
+
 · Solution: Because the number of queries is small, we can use find to locate "67" and erase to delete it. The string shrinks automatically after deletion; repeat until no "67" is found.
-    解法：因為查詢次數很少，可以直接用 find 找到 "67"，再用 erase 把它刪掉。刪完後字串會自己變短，重複直到找不到 "67" 為止。
+
+解法：因為查詢次數很少，可以直接用 find 找到 "67"，再用 erase 把它刪掉。刪完後字串會自己變短，重複直到找不到 "67" 為止。
 
 ---
 
-Subtask 4 (21%): $Q \le 10$, no additional restrictions
-子任務 4 (21%)：$Q \le 10$，無額外限制
+> Subtask 4 (21%): $Q \le 10$, no additional restrictions
 
 · Characteristic: The string also contains other characters (1‑5, 8, 9, etc.), but the number of queries is still at most 10.
-    特性：字串中還夾雜了其他字元（1‑5, 8, 9 之類的），但查詢次數一樣最多 10 筆。
+    
+特性：字串中還夾雜了其他字元（1‑5, 8, 9 之類的），但查詢次數一樣最多 10 筆。
+
 · Solution: Although other characters are present, they do not form "67". We can still use the find + erase simulation from Subtask 2. Characters other than 6 and 7 stay in place and act as separators.
-    解法：雖然有其他字元，但那些字元不會構成 "67"。我們還是可以沿用子任務 2 的 find + erase 模擬，6 和 7 以外的字元就留在原地當分隔符。
+
+解法：雖然有其他字元，但那些字元不會構成 "67"。我們還是可以沿用子任務 2 的 find + erase 模擬，6 和 7 以外的字元就留在原地當分隔符。
 
 ---
 
-Subtask 3 (16%): $S$ only contains digits 6 and 7, and all 6's appear before any 7
-子任務 3 (16%)：$S$ 只包含數字 6 和 7，且所有 6 都在 7 的前面
+> Subtask 3 (16%): $S$ only contains digits 6 and 7, and all 6's appear before any 7
 
 · Characteristic: The number of queries $Q$ can be as high as $10^5$, so simulation is not possible. However, the string format is fixed: 66...677...7.
-    特性：查詢次數 $Q$ 可以高達 $10^5$，模擬一定不行。不過字串格式是固定的：66...677...7。
+    
+特性：查詢次數 $Q$ 可以高達 $10^5$，模擬一定不行。不過字串格式是固定的：66...677...7。
+
 · Solution: Under this condition, any sub‑interval is also of the form 66...677...7. The most efficient way to eliminate all "67" is to delete all 6’s or delete all 7’s in the interval. Hence the answer is the minimum of the count of 6’s and the count of 7’s in the interval. This can be computed in $O(1)$ using 1D prefix sums.
-    解法：在這種條件下，任意子區間也會是 66...677...7 的形式。要消掉所有 "67"，最直接的方法就是把區間內的 6 全部刪掉，或是把 7 全部刪掉，所以答案就是區間內 6 和 7 的數量的最小值。這個可以用一維前綴和在 $O(1)$ 內算出來。
+
+解法：在這種條件下，任意子區間也會是 66...677...7 的形式。要消掉所有 "67"，最直接的方法就是把區間內的 6 全部刪掉，或是把 7 全部刪掉，所以答案就是區間內 6 和 7 的數量的最小值。這個可以用一維前綴和在 $O(1)$ 內算出來。
 
 ---
 
-Subtask 5 (33%): No additional restrictions
-子任務 5 (33%)：無額外限制
+> Subtask 5 (33%): No additional restrictions
 
 · Characteristic: Large data range; requires a segment tree with DP matrix merging to answer each query in $O(\log |S|)$.
     特性：數據範圍大；需要用線段樹搭配 DP 矩陣合併，才能在 $O(\log |S|)$ 內回答每次查詢。
 
 ---
 
-51 Points (Subtasks 1 + 2 + 4)
-51 分（子任務 1 + 2 + 4）
+## 51 Points (Subtasks 1 + 2 + 4) (Credit: Kasper Ho)
 
 These three subtasks share the characteristic $Q \le 10$. We can simulate using find and erase:
+
 這三個子任務都有 $Q \le 10$ 的特性，我們可以直接用 find 和 erase 模擬：
 
 1. For each query, obtain the substring with s.substr(l, r - l + 1).
-      每次查詢時，用 s.substr(l, r - l + 1) 取出子字串。
+
+每次查詢時，用 s.substr(l, r - l + 1) 取出子字串。
+
 2. Use a while loop with temp.find("67") to locate the target.
-      用 while 迴圈搭配 temp.find("67") 找到目標。
+
+用 while 迴圈搭配 temp.find("67") 找到目標。
+   
 3. If found, increment a counter and remove that segment with temp.erase(pos, 2).
-      找到後就把計數器加一，並用 temp.erase(pos, 2) 把那一段刪掉。
+
+找到後就把計數器加一，並用 temp.erase(pos, 2) 把那一段刪掉。
+   
 4. Repeat until "67" is no longer found, then output the counter.
-      重複直到找不到 "67"，然後輸出計數器的值。
+
+重複直到找不到 "67"，然後輸出計數器的值。
 
 
 
-Code (51 marks)
+# Code (51 marks)
 
 ```cpp
 #include <bits/stdc++.h>
@@ -577,22 +600,27 @@ int main() {
 
 ---
 
-67 Points (Adding Subtask 3)
-67 分（加入子任務 3）
+## 67 Points (Adding Subtask 3)
 
 At the beginning of the program, check whether the whole string satisfies Subtask 3’s characteristic (only 6 and 7, and all 6’s appear before any 7):
+
 程式一開始先判斷整條字串是否滿足子任務 3 的特性（只有 6 和 7，而且 6 全在 7 前面）：
 
 · If it does, use prefix sum queries for all queries, outputting $\min(\text{count}_6, \text{count}_7)$ in the interval.
-    如果滿足，就對所有查詢都用前綴和處理，輸出區間內 $\min(\text{count}_6, \text{count}_7)$。
+    
+如果滿足，就對所有查詢都用前綴和處理，輸出區間內 $\min(\text{count}_6, \text{count}_7)$。
+
 · If it does not, fall back to the 51‑point find + erase simulation.
-    如果不滿足，就退回 51 分的 find + erase 模擬做法。
+
+如果不滿足，就退回 51 分的 find + erase 模擬做法。
+
+
 
 ---
 
 
 
-Code (67 marks)
+# Code (67 marks)
 
 ```cpp
 #include <bits/stdc++.h>
@@ -605,7 +633,7 @@ int main() {
 }
 ```
 
-Recommended Questions:
+## Recommended Questions:
 
 
 
@@ -614,54 +642,73 @@ Recommended Questions:
 
 
 
-E Dungeon 地下城
+### E Dungeon 地下城
 
-Before start
+## Before start
 
 We'll be using some graph and data structure concepts in this solution. While I'll explain the key ideas, it's a good idea to brush up on some basic graph knowledge before diving in.
+
 這題解會用到一些圖論和資料結構的概念。雖然我會講解核心想法，但開始讀之前最好先補充一些基礎圖論知識。
 
 Graph (I) 2026 : https://assets.hkoi.org/training2026/g-i.pdf
+
 DFS (HKOI judge) : https://judge.hkoi.org/task/C800
+
 Data Structures (III) 2026 (Sparse Table) : https://assets.hkoi.org/training2026/ds-iii.pdf#page=5
+
 Data Structures (III) 2026 (Segment Tree) : https://assets.hkoi.org/training2026/ds-iii.pdf#page=35
+
 Data Structures (IV) 2026 (Lazy Propagation on Segment Tree) : https://assets.hkoi.org/training2026/ds-iv.pdf#page=25
+
 Data Structures (IV) 2026 (Binary Search on Segment Tree + Persistent Segment Tree) : https://assets.hkoi.org/training2026/ds-iv.pdf#page=80
+
 Graph (V) 2026 : https://assets.hkoi.org/training2026/g-v.pdf#page=80
+
 Sparse Table (HKOI judge) : https://judge.hkoi.org/task/B110
+
 Segment Tree (Point Update, Range Query) (HKOI judge) : https://judge.hkoi.org/task/B111
+
 Segment Tree (Range Maximum Query) (HKOI judge) : https://judge.hkoi.org/task/M0921
+
 Lazy Propagation on Segment Tree (HKOI judge) : https://judge.hkoi.org/task/A101
+
 Persistent Segment Tree (HKOI judge) : https://judge.hkoi.org/task/A103
+
 Heavy-light Decomposition (HKOI judge) : https://judge.hkoi.org/task/A222
 
 ---
 
-Core Concept: What are we solving for?
+## Core Concept: What are we solving for?
 
 In the game, you travel from a starting point $S$ to a destination $T$. Every room on this path contains a monster with a level equal to the room number $i$. You must consume your level $i$ sword to defeat it.
+
 遊戲中你從起點 $S$ 走到終點 $T$，這條路上的每個房間都有一隻等級等於房間編號 $i$ 的怪物，你必須消耗等級 $i$ 的劍才能打敗它。
 
 This means: If room $i$ is on the path from $S$ to $T$, your sword of level $i$ will be consumed.
+
 也就是說：如果房間 $i$ 在 $S$ 到 $T$ 的路徑上，你那把等級 $i$ 的劍就會被用掉。
 
 Therefore, the "highest sword level" the player can keep is simply the largest room number that is NOT on the path from $S$ to $T$. If all rooms are on the path, we output 0.
+
 所以，玩家能保留的「最高劍等級」就等於 不在 $S$ 到 $T$ 路徑上的最大房間編號。如果所有房間都在路徑上，就輸出 0。
 
 ---
 
-Subtask 1: $N, M \leq 1000, Q = 1$
+> Subtask 1: $N, M \leq 1000, Q = 1$
 
 By looking at the constraints, the data size is small enough that an inefficient brute force solution can handle this subtask.
+
 看一下限制，數據量夠小，一個不太有效率的暴力解就能搞定這個子任務。
 
 So the question is how? How can we use a simple method to get the answer?
+
 所以問題是怎麼做？怎麼用簡單的方法求出答案？
 
 Think about keeping the largest sword only during the journey from $S$ to $T$. We can ignore one node (the highest possible sword we want to keep) and try to find a simple path from $S$ to $T$. Since we want the highest possible sword, we can try ignoring nodes from $N$ down to $1$, and simply use DFS from $S$ to $T$ to check if a simple path exists.
+
 想像一下，我們從 $S$ 走到 $T$ 時想保留最大的劍，那麼我們可以忽略圖中的某個節點，再看看能不能找到一條從 $S$ 到 $T$ 的簡單路徑。因為我們要最大可能的劍，所以可以從 $N$ 一路往下試到 $1$，每次忽略掉那個節點，然後用 DFS 檢查 $S$ 到 $T$ 有沒有簡單路徑。
 
-Code:
+# Code:
 
 ```cpp
 #include <bits/stdc++.h>
@@ -721,18 +768,20 @@ int main() {
 }
 ```
 
-Time Complexity: $O(QN^2)
+# Time Complexity: $O(QN^2)
 
 ---
 
-Advanced subtasks
+## Advanced subtasks
 
-Subtask 2: $M = N-1$ (Graph is a Chain)
+> Subtask 2: $M = N-1$ (Graph is a Chain)
 
 The graph is a chain. It looks just like a single straight line.
+
 這張圖是一條鏈，看起來就像一條直線。
 
 Here is an example of the graph in this subtask ($N = 4, M = 3$):
+
 以下是這個子任務的一個例子 ($N = 4, M = 3$)：
 
 ```text
@@ -742,20 +791,26 @@ Here is an example of the graph in this subtask ($N = 4, M = 3$):
 ```
 
 The physical graph structure connects the nodes like this:
+
 圖的實際連接長這樣：
 
 3 - 4 - 2 - 1
 
 Because a chain only has one simple path between any two nodes, we can treat the entire graph like an array. However, the node IDs given in the input are not in a neat order. Therefore, we can use a single DFS traversal to flatten the graph into a neat 1D array.
+
 因為鏈的任意兩點間只有一條簡單路徑，我們可以把整張圖當成一個陣列來處理。但輸入給的節點編號不一定是漂亮的順序，所以我們可以用一次 DFS 把圖攤平成一個整齊的一維陣列。
 
 We will create two helper arrays:
+
 我們會建立兩個輔助陣列：
 
 · arr[i]: Tells us the actual room ID at the $i$-th position on the chain.
-    arr[i]：記錄鏈上第 $i$ 個位置的實際房間編號。
+
+arr[i]：記錄鏈上第 $i$ 個位置的實際房間編號。
+
 · pos[u]: Tells us the 1D position (index) of room ID $u$.
-    pos[u]：記錄房間 $u$ 在這個一維陣列中的位置（索引）。
+
+pos[u]：記錄房間 $u$ 在這個一維陣列中的位置（索引）。
 
 ```cpp
 void dfs(int u, int p, int d) {
@@ -770,35 +825,38 @@ void dfs(int u, int p, int d) {
 ```
 
 After conversion, if we print arr from index 1 to 4, it looks like this: 3, 4, 2, 1.
+
 轉換後，如果我們印出索引 1 到 4 的 arr，會得到：3, 4, 2, 1。
 
 Once flattened, any path from a starting room $S$ to a target room $T$ simply covers a continuous segment on our 1D array. We have two main approaches to solve this subtask.
+
 攤平之後，從起點 $S$ 到終點 $T$ 的路徑就只會對應到一維陣列上的一段連續區間。我們有兩種主要方法來解這個子任務。
 
 ---
 
-Approach 1: Range Maximum Query (Sparse Table / Segment Tree)
-
-方法一：區間最大值查詢（稀疏表 / 線段樹）
+> Approach 1: Range Maximum Query 區間最大值查詢 (Sparse Table 稀疏表 / Segment Tree 線段樹 )
 
 Assume we want to travel from $S$ to $T$. Let's look at their positions: pos[S] and pos[T].
+
 假設我們要從 $S$ 走到 $T$，先看它們在一維陣列上的位置：pos[S] 和 pos[T]。
 
 To make things easier, if pos[S] > pos[T], we can swap them so that $S$ always appears before $T$ on our chain (meaning pos[S] < pos[T]).
+
 為了方便，如果 pos[S] > pos[T]，我們可以把兩個交換一下，讓 $S$ 在鏈上總是排在 $T$ 前面（也就是 pos[S] < pos[T]）。
 
 The path from $S$ to $T$ consumes all swords in the range [pos[S], pos[T]]. This implies the surviving, unused swords belong to the remaining two parts of the chain:
+
 從 $S$ 到 $T$ 的路徑會消耗掉區間 [pos[S], pos[T]] 內所有的劍。這表示還能保留、沒被用到的劍會落在鏈的另外兩段：
 
 1. The left part: [1, pos[S] - 1]
-      左段：[1, pos[S] - 1]
+
 2. The right part: [pos[T] + 1, N]
-      右段：[pos[T] + 1, N]
 
 To find the maximum sword we can keep, we just need to find the maximum room ID across these two segments! We can do this efficiently using a Sparse Table or a Segment Tree. We must also carefully handle cases where these segments are empty (e.g., if $S$ is at the very beginning of the chain, the left part does not exist).
+
 要找出我們能保留的最大劍，就只要在這兩段裡面找出最大的房間編號就行了！我們可以用稀疏表或是線段樹來高效率地查詢。當然也要小心處理這些區間可能為空的情況（例如 $S$ 剛好是鏈的起點，左段就不存在）。
 
-Sparse Table Code:
+## Sparse Table Code:
 
 ```cpp
 #include <bits/stdc++.h>
@@ -883,13 +941,13 @@ int main() {
 }
 ```
 
-Time Complexity (Sparse Table):
+# Time Complexity (Sparse Table):
 
 · Precompute: $O(N \log N)$
 · Per query: $O(1)$
 · Overall: $O(N \log N + Q)$
 
-Segment Tree Code:
+## Segment Tree Code:
 (The logic is the same, but we use a segment tree for the range maximum queries.)
 (邏輯相同，只是用線段樹做區間最大值查詢。)
 
@@ -964,7 +1022,7 @@ int main() {
 }
 ```
 
-Time Complexity (Segment Tree):
+# Time Complexity (Segment Tree):
 
 · Precompute: $O(N)$
     預處理：$O(N)$
@@ -975,17 +1033,18 @@ Time Complexity (Segment Tree):
 
 ---
 
-Approach 2: Binary Search on Persistent Segment Tree
-
-方法二：在持久化線段樹上二分搜尋
+> Approach 2: Binary Search on Persistent Segment Tree (在持久化線段樹上二分搜尋)
 
 In this approach, instead of storing the maximum room IDs in the array positions, we use a Persistent Segment Tree (PST).
+
 這個方法不是把最大房間編號存在陣列位置上，而是用一個持久化線段樹 (PST)。
 
 Version $i$ of the tree will keep track of the frequencies of all sword levels (room IDs) present in the chain from position 1 up to position $i$.
+
 版本 $i$ 的樹會記錄從鏈上位置 1 一路到位置 $i$ 之間，各個劍等級（房間編號）出現的次數。
 
 When querying the path from pos[S] to pos[T], we want to find the maximum sword level that has an occurrence count of 0 inside this range. By traversing down the Persistent Segment Tree and checking the right child (larger sword levels) first, we can find this answer in $O(\log N)$ time.
+
 當我們查詢 pos[S] 到 pos[T] 這段路徑時，我們想找出在該範圍內出現次數為 0 的最大劍等級。透過在持久化線段樹上往下走，並優先檢查右子樹（較大的劍等級），就能在 $O(\log N)$ 內找到答案。
 
 ```cpp
@@ -1073,7 +1132,7 @@ int main() {
 }
 ```
 
-Time Complexity (Persistent Segment Tree):
+# Time Complexity (Persistent Segment Tree):
 
 · Precompute: $O(N \log N)$
     預處理：$O(N \log N)$
@@ -1084,18 +1143,22 @@ Time Complexity (Persistent Segment Tree):
 
 ---
 
-Subtask 3: $M = N-1$ (Graph is a Tree)
+> Subtask 3: $M = N-1$ (Graph is a Tree)
 
 The graph is now a standard Tree. The simple path from $S$ to $T$ is still unique, but the graph is no longer a single straight line.
+
 現在圖是一棵普通的樹了。從 $S$ 到 $T$ 的簡單路徑仍然是唯一的，但圖不再只是一條直線。
 
 However, we can still use Approach 2 from Subtask 2!
+
 不過，我們還是可以沿用子任務 2 的方法二！
 
 We will use a technique called Heavy-Light Decomposition (HLD). HLD cleverly cuts any tree into a collection of straight chains. The beautiful property of HLD is that any path between two nodes $u$ and $v$ can be broken down into at most $O(\log N)$ continuous segments across these chains.
+
 我們會用到一個叫重鏈剖分 (HLD) 的技巧。HLD 巧妙地將任意樹切成好幾條直鏈。HLD 的一個優美特性是，任意兩點 $u$ 和 $v$ 之間的路徑，都可以被拆成不超過 $O(\log N)$ 段在這些鏈上的連續區間。
 
 Once we break the query path into $O(\log N)$ segments, we can query our Persistent Segment Tree just like before. Instead of checking a single interval [L, R], we sum up the occurrences of swords across all the $O(\log N)$ intervals simultaneously as we traverse down the PST.
+
 當我們把查詢路徑拆成 $O(\log N)$ 段後，就可以像之前一樣查詢持久化線段樹。不同的是，我們不再只看一個 [L, R] 區間，而是在沿著 PST 往下走的過程中，同時加總所有 $O(\log N)$ 個區間內的劍出現次數。
 
 ```cpp
@@ -1259,17 +1322,19 @@ int main() {
 }
 ```
 
-Time Complexity (HLD + Persistent Segment Tree):
+# Time Complexity (HLD + Persistent Segment Tree):
 
 · Precompute: $O(N \log N)$
 · Per query: $O(\log^2 N)$ (Because HLD provides $O(\log N)$ segments, and iterating through them while traversing the $O(\log N)$ tree depth gives $O(\log^2 N)$).
-    每次查詢：$O(\log^2 N)$（因為 HLD 會給出 $O(\log N)$ 段區間，而在走 PST 的 $O(\log N)$ 層時會需要走訪所有這些區間，合起來就是 $O(\log^2 N)$）。
+    
+每次查詢：$O(\log^2 N)$（因為 HLD 會給出 $O(\log N)$ 段區間，而在走 PST 的 $O(\log N)$ 層時會需要走訪所有這些區間，合起來就是 $O(\log^2 N)$）。
+
 · Overall: $O(N \log N + Q \log^2 N)$
     整體：$O(N \log N + Q \log^2 N)$
 
 ---
 
-Practice Questions:
+## Practice Questions:
 
 · M2243 Yet Another RMQ
 
